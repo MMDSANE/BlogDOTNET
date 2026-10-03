@@ -1,4 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using MyFirstApp.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+// برای BlogDbContext از EF Core استفاده کن، دیتابیس PostgreSQL هست، و اطلاعات اتصالش رو از DefaultConnection بردار.
+builder.Services.AddDbContext<BlogDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -25,5 +33,5 @@ app.MapControllerRoute(
         pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-
+SeedData.Initialize(app);
 app.Run();
